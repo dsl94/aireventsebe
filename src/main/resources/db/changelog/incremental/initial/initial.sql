@@ -46,7 +46,10 @@ create table users
     is_active   boolean not null,
     minutes     bigint,
     password    varchar(255),
-    username    varchar(255)
+    username    varchar(255),
+    vatsim_id   varchar(255),
+    ivao_id   varchar(255),
+    poscon_id   varchar(255)
 );
 
 create table flight

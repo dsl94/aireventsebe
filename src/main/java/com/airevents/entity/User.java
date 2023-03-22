@@ -20,6 +20,12 @@ public class User implements Serializable {
     private String username;
     private String fullName;
     private String email;
+    @Column( name = "vatsim_id")
+    private String vatsimId;
+    @Column( name = "ivao_id")
+    private String ivaoId;
+    @Column( name = "poscon_id")
+    private String posconId;
     @JsonIgnore
     private String password;
     private boolean isActive;
