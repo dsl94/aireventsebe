@@ -12,12 +12,9 @@ import java.util.List;
 public class JwtResponse {
 
     private String token;
-    private String location;
     private String expiration;
-    private String username;
-    private String airlineIcao;
-    private String airlineName;
-    private int numberOfBookings;
+    private String email;
+    private String fullName;
     private List<String> roles;
 
 }

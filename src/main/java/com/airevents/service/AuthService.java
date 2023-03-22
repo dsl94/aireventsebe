@@ -8,13 +8,27 @@ import com.airevents.error.AirEventsException;
 import com.airevents.error.ErrorCode;
 import com.airevents.repository.RoleRepository;
 import com.airevents.repository.UserRepository;
+import com.airevents.security.JwtTokenUtil;
 import com.airevents.security.RolesConstants;
+import com.airevents.security.dto.JwtAuthenticationDto;
+import com.airevents.security.dto.JwtResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.Collections;
-import java.util.Optional;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 public class AuthService {
@@ -39,5 +53,9 @@ public class AuthService {
         user.setRoles(Collections.singleton(role));
 
         userRepository.save(user);
+    }
+
+    public User getByEmail(String email) {
+        return userRepository.findByUsernameIgnoreCase(email);
     }
 }
