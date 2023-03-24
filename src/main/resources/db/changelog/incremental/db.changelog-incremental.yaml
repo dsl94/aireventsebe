@@ -1,3 +1,5 @@
 databaseChangeLog:
   - include:
       file: db/changelog/incremental/initial/initial.sql
+  - include:
+      file: db/changelog/incremental/aircraft-mapping/aircraft-mapping.sql

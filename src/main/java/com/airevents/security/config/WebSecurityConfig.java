@@ -69,7 +69,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.js"
                 ).permitAll()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-//                .antMatchers("/admin/spc/all").hasAnyRole("USER", "ADMIN", "SYSTEM_ADMIN")
+                .antMatchers("/sys-admin/*").hasAnyRole("SYSTEM_ADMIN")
 //                .antMatchers("/admin/**").hasRole("SYSTEM_ADMIN")
 //                .antMatchers("/user/**").hasAnyRole("USER", "ADMIN")
 //                .antMatchers("/airline/user/**").hasAnyRole("USER", "ADMIN")
