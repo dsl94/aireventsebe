@@ -27,12 +27,12 @@ public class AircraftMappingController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<AircraftMappingResponse>> createMapping() {
+    public ResponseEntity<List<AircraftMappingResponse>> getAll() {
         return ResponseEntity.ok(aircraftMappingService.getAllMappings());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> createMapping(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> deleteMapping(@PathVariable("id") Long id) {
         aircraftMappingService.delete(id);
         return ResponseEntity.ok().build();
     }

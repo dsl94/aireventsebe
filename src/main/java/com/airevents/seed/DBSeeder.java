@@ -60,7 +60,7 @@ public class DBSeeder {
         if (roleRepository.findAll().size() == 0) {
             logger.info("Seeding roles");
             Role admin = new Role();
-            admin.setName("Admin");
+            admin.setName("Dispatcher");
             admin.setRole(RolesConstants.ROLE_ADMIN.name());
             roleRepository.save(admin);
 
@@ -70,7 +70,7 @@ public class DBSeeder {
             roleRepository.save(user);
 
             Role systemAdmin = new Role();
-            systemAdmin.setName("Super admin");
+            systemAdmin.setName("Admin");
             systemAdmin.setRole(RolesConstants.ROLE_SYSTEM_ADMIN.name());
             roleRepository.save(systemAdmin);
         }

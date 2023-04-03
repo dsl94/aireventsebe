@@ -49,7 +49,11 @@ create table users
     username    varchar(255),
     vatsim_id   varchar(255),
     ivao_id   varchar(255),
-    poscon_id   varchar(255)
+    poscon_id   varchar(255),
+    created_date timestamp,
+    updated_date timestamp,
+    first_login_date timestamp,
+    last_login_date timestamp
 );
 
 create table flight

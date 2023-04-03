@@ -4,8 +4,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -41,6 +44,20 @@ public class User implements Serializable {
     @JsonIgnore
     private List<Flight> flights;
     private Long minutes;
+
+    @CreationTimestamp
+    @Column(name = "created_date")
+    private LocalDateTime createDateTime;
+
+    @UpdateTimestamp
+    @Column(name = "updated_date")
+    private LocalDateTime updateDateTime;
+
+    @Column(name = "first_login_date")
+    private LocalDateTime firstLoginDate;
+
+    @Column(name = "last_login_date")
+    private LocalDateTime lastLoginDate;
 
     public User() {
         this.isActive = true;

@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -56,6 +57,16 @@ public class AuthService {
     }
 
     public User getByEmail(String email) {
-        return userRepository.findByUsernameIgnoreCase(email);
+        User user = userRepository.findByUsernameIgnoreCase(email);
+        if (user.getFirstLoginDate() == null) {
+            user.setFirstLoginDate(LocalDateTime.now());
+            user.setLastLoginDate(LocalDateTime.now());
+        } else {
+            user.setLastLoginDate(LocalDateTime.now());
+        }
+
+        userRepository.save(user);
+
+        return user;
     }
 }
