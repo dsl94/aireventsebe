@@ -13,15 +13,11 @@ public class UserResponse {
     private Long id;
     private String fullName;
     private String email;
-    private String vatsimId;
-    private String ivaoId;
-    private String posconId;
-    private boolean isActive;
-    private Long minutes;
+    private String stravaId;
     private List<String> roles;
-
     private String createdDate;
     private String updateDate;
+    private String membershipUntil;
     private String firstLoginDate;
     private String lastLoginDate;
 }

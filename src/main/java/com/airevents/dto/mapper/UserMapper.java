@@ -1,10 +1,11 @@
 package com.airevents.dto.mapper;
 
-import com.airevents.dto.request.RegisterRequest;
+import com.airevents.dto.request.CreateUserRequest;
 import com.airevents.dto.response.UserResponse;
 import com.airevents.entity.Role;
 import com.airevents.entity.User;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,15 +13,17 @@ import java.util.stream.Collectors;
 public class UserMapper {
 
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-    public static User registerRequestToEntity(RegisterRequest request) {
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    private static final DateTimeFormatter REQUEST_DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    public static User registerRequestToEntity(CreateUserRequest request) {
         User user = new User();
         user.setEmail(request.getEmail());
         user.setUsername(request.getEmail());
         user.setFullName(request.getFullName());
-        user.setVatsimId(request.getVatsimId());
-        user.setIvaoId(request.getIvaoId());
-        user.setPosconId(request.getPosconId());
-
+        user.setStravaId(request.getStravaId());
+        if (request.getMembershipUntil() != null) {
+            user.setMembershipUntil(LocalDate.parse(request.getMembershipUntil(), REQUEST_DATE_FORMAT).atStartOfDay());
+        }
         return user;
     }
 
@@ -29,14 +32,11 @@ public class UserMapper {
                 entity.getId(),
                 entity.getFullName(),
                 entity.getEmail(),
-                entity.getVatsimId(),
-                entity.getIvaoId(),
-                entity.getPosconId(),
-                entity.isActive(),
-                entity.getMinutes(),
+                entity.getStravaId(),
                 entity.getRoles().stream().map(Role::getName).collect(Collectors.toList()),
                 entity.getCreateDateTime().format(DATE_TIME_FORMATTER),
                 entity.getUpdateDateTime().format(DATE_TIME_FORMATTER),
+                entity.getMembershipUntil() == null ? null : entity.getMembershipUntil().format(DATE_FORMATTER),
                 entity.getFirstLoginDate() == null ? null : entity.getFirstLoginDate().format(DATE_TIME_FORMATTER),
                 entity.getLastLoginDate() == null ? null : entity.getLastLoginDate().format(DATE_TIME_FORMATTER)
         );

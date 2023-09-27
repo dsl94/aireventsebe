@@ -1,9 +1,9 @@
 package com.airevents.error;
 
-public class AirEventsException extends RuntimeException {
+public class RcnException extends RuntimeException {
     private ErrorCode errorCode;
 
-    public AirEventsException(ErrorCode errorCode, String message) {
+    public RcnException(ErrorCode errorCode, String message) {
         super(message);
         this.errorCode = errorCode;
     }

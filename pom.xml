@@ -11,8 +11,8 @@
 	<groupId>com.airevents</groupId>
 	<artifactId>airevents</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>airevents</name>
-	<description>Backend for air events</description>
+	<name>rcn</name>
+	<description>Backend for rcn</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>

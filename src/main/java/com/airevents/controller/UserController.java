@@ -1,13 +1,12 @@
 package com.airevents.controller;
 
-import com.airevents.dto.response.AircraftMappingResponse;
+import com.airevents.dto.request.CreateUserRequest;
+import com.airevents.dto.request.UpdateUserRequest;
 import com.airevents.dto.response.UserResponse;
 import com.airevents.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,5 +20,26 @@ public class UserController {
     @GetMapping()
     public ResponseEntity<List<UserResponse>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
+    }
+    @PostMapping()
+    public ResponseEntity<Void> createUser(@RequestBody CreateUserRequest request) {
+        userService.createUser(request);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<UserResponse> updateUser(@RequestBody UpdateUserRequest request, @PathVariable Long id) {
+        return ResponseEntity.ok(userService.update(id, request));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UserResponse> getUser(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.getById(id));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        userService.delete(id);
+        return ResponseEntity.ok().build();
     }
 }

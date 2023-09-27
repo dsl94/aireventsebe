@@ -23,15 +23,18 @@ public class User implements Serializable {
     private String username;
     private String fullName;
     private String email;
-    @Column( name = "vatsim_id")
-    private String vatsimId;
-    @Column( name = "ivao_id")
-    private String ivaoId;
-    @Column( name = "poscon_id")
-    private String posconId;
+    @Column( name = "strava_id")
+    private String stravaId;
+    @Column( name = "strava_token")
+    private String stravaToken;
+    @Column( name = "strava_refresh_token")
+    private String stravaRefreshToken;
     @JsonIgnore
     private String password;
     private boolean isActive;
+
+    @Column(name = "membership_until")
+    private LocalDateTime membershipUntil;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_role",
@@ -39,11 +42,6 @@ public class User implements Serializable {
             inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
     @BatchSize(size = 20)
     private Set<Role> roles = new HashSet<>();
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private List<Flight> flights;
-    private Long minutes;
 
     @CreationTimestamp
     @Column(name = "created_date")
@@ -61,6 +59,5 @@ public class User implements Serializable {
 
     public User() {
         this.isActive = true;
-        this.minutes = 0L;
     }
 }

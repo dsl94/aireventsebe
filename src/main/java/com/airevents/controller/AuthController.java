@@ -1,6 +1,6 @@
 package com.airevents.controller;
 
-import com.airevents.dto.request.RegisterRequest;
+import com.airevents.dto.request.CreateUserRequest;
 import com.airevents.entity.User;
 import com.airevents.security.JwtTokenUtil;
 import com.airevents.security.dto.JwtAuthenticationDto;
@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -43,7 +42,7 @@ public class AuthController {
     private UserDetailsService userDetailsService;
 
     @PostMapping("/register")
-    public ResponseEntity<Void> register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<Void> register(@RequestBody CreateUserRequest request) {
         request.validate();
         authService.register(request);
         return ResponseEntity.ok().build();
