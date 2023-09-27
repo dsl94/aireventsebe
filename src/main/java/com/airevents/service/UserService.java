@@ -73,4 +73,10 @@ public class UserService {
         User user = userRepository.findById(userId).orElseThrow(() -> new RcnException(ErrorCode.NOT_FOUND, "Korisnik ne postoji"));
         userRepository.delete(user);
     }
+
+    public UserResponse getUserProfile(String username) {
+        User user = userRepository.findByUsernameIgnoreCase(username);
+
+        return UserMapper.entityToResponse(user);
+    }
 }

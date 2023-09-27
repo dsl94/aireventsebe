@@ -43,6 +43,12 @@ public class User implements Serializable {
     @BatchSize(size = 20)
     private Set<Role> roles = new HashSet<>();
 
+    @ManyToMany
+    @JoinTable(name = "user_race",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "race_id"))
+    private Set<Race> races = new HashSet<>();
+
     @CreationTimestamp
     @Column(name = "created_date")
     private LocalDateTime createDateTime;
