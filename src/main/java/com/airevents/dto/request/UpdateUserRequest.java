@@ -14,14 +14,16 @@ import org.apache.commons.lang3.StringUtils;
 public class UpdateUserRequest implements Validate {
     private String fullName;
     private String membershipUntil;
+    private String stravaId;
+    private String email;
+    private String shirtSize;
+    private String phone;
+    private String info;
 
     @Override
     public void validate() {
         if (StringUtils.isBlank(this.fullName)) {
             throw new RcnException(ErrorCode.BAD_REQUEST, "Ime i prezime je obvezno");
-        }
-        if (StringUtils.isBlank(this.membershipUntil)) {
-            throw new RcnException(ErrorCode.BAD_REQUEST, "Datum clanarine je obvezan");
         }
     }
 }

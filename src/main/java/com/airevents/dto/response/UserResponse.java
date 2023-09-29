@@ -12,6 +12,10 @@ import java.util.List;
 public class UserResponse {
     private Long id;
     private String fullName;
+    private String gender;
+    private String shirtSize;
+    private String info;
+    private String phone;
     private String email;
     private String stravaId;
     private List<String> roles;

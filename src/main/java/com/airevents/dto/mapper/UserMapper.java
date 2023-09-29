@@ -21,6 +21,9 @@ public class UserMapper {
         user.setUsername(request.getEmail());
         user.setFullName(request.getFullName());
         user.setStravaId(request.getStravaId());
+        user.setGender(request.getGender());
+        user.setInfo(request.getInfo());
+        user.setPhone(request.getPhone());
         if (request.getMembershipUntil() != null) {
             user.setMembershipUntil(LocalDate.parse(request.getMembershipUntil(), REQUEST_DATE_FORMAT).atStartOfDay());
         }
@@ -31,6 +34,10 @@ public class UserMapper {
         return new UserResponse(
                 entity.getId(),
                 entity.getFullName(),
+                entity.getGender(),
+                entity.getShirtSize(),
+                entity.getInfo(),
+                entity.getPhone(),
                 entity.getEmail(),
                 entity.getStravaId(),
                 entity.getRoles().stream().map(Role::getName).collect(Collectors.toList()),

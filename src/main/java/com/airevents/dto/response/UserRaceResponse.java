@@ -4,15 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RaceResponse {
+public class UserRaceResponse {
     private Long id;
-    private String title;
-    private String date;
-    private String distances;
-    private List<UserRaceResponse> users;
+    private String name;
 }

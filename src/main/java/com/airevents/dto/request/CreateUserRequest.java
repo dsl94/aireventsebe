@@ -16,6 +16,9 @@ public class CreateUserRequest implements Validate {
     private String email;
     private String password;
     private String stravaId;
+    private String gender;
+    private String info;
+    private String phone;
     private String membershipUntil;
 
     @Override

@@ -3,6 +3,7 @@ package com.airevents.dto.mapper;
 import com.airevents.dto.request.CreateUserRequest;
 import com.airevents.dto.request.RaceRequest;
 import com.airevents.dto.response.RaceResponse;
+import com.airevents.dto.response.UserRaceResponse;
 import com.airevents.dto.response.UserResponse;
 import com.airevents.entity.Race;
 import com.airevents.entity.Role;
@@ -36,7 +37,7 @@ public class RaceMapper {
         );
     }
 
-    public static List<String> getUsers(Set<User> users) {
-        return users.stream().map(User::getFullName).collect(Collectors.toList());
+    public static List<UserRaceResponse> getUsers(Set<User> users) {
+        return users.stream().map(u -> new UserRaceResponse(u.getId(), u.getFullName())).collect(Collectors.toList());
     }
 }

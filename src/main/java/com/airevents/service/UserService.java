@@ -1,6 +1,7 @@
 package com.airevents.service;
 
 import com.airevents.dto.mapper.UserMapper;
+import com.airevents.dto.request.ChangePasswordRequest;
 import com.airevents.dto.request.CreateUserRequest;
 import com.airevents.dto.request.UpdateUserRequest;
 import com.airevents.dto.response.UserResponse;
@@ -59,9 +60,33 @@ public class UserService {
     public UserResponse update(Long userId, UpdateUserRequest request) {
         User user = userRepository.findById(userId).orElseThrow(() -> new RcnException(ErrorCode.NOT_FOUND, "Korisnik ne postoji"));
         user.setFullName(request.getFullName());
+        user.setShirtSize(request.getShirtSize());
+        user.setPhone(request.getPhone());
+        user.setInfo(request.getInfo());
         user.setMembershipUntil(LocalDate.parse(request.getMembershipUntil(), REQUEST_DATE_FORMAT).atStartOfDay());
 
         return UserMapper.entityToResponse(userRepository.save(user));
+    }
+
+    public UserResponse updateProfile(String username, UpdateUserRequest request) {
+        User user = userRepository.findByUsernameIgnoreCase(username);
+
+        user.setFullName(request.getFullName());
+        user.setEmail(request.getEmail());
+        user.setStravaId(request.getStravaId());
+        user.setShirtSize(request.getShirtSize());
+        user.setPhone(request.getPhone());
+        user.setInfo(request.getInfo());
+
+        return UserMapper.entityToResponse(userRepository.save(user));
+    }
+
+    public void changePassword(String username, ChangePasswordRequest request) {
+        User user = userRepository.findByUsernameIgnoreCase(username);
+
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+
+        userRepository.save(user);
     }
 
     public UserResponse getById(Long userId) {

@@ -25,6 +25,11 @@ public class User implements Serializable {
     private String email;
     @Column( name = "strava_id")
     private String stravaId;
+    @Column( name = "shirt_size")
+    private String shirtSize;
+    private String gender;
+    private String info;
+    private String phone;
     @Column( name = "strava_token")
     private String stravaToken;
     @Column( name = "strava_refresh_token")
@@ -65,5 +70,13 @@ public class User implements Serializable {
 
     public User() {
         this.isActive = true;
+    }
+
+    public void addRace(Race race) {
+        this.races.add(race);
+    }
+
+    public void removeRace(Race race) {
+        this.races.remove(race);
     }
 }
