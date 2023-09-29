@@ -72,6 +72,6 @@ public class AuthController {
 
         User userFromDb = authService.getByEmail(userDetails.getUsername());
 
-        return ResponseEntity.ok(new JwtResponse(token, dateFormat.format(expiration), userFromDb.getEmail(), userFromDb.getFullName(), roles));
+        return ResponseEntity.ok(new JwtResponse(token, userFromDb.getId(), dateFormat.format(expiration), userFromDb.getEmail(), userFromDb.getFullName(), roles));
     }
 }

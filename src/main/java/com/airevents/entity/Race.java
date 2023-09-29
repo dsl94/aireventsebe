@@ -1,6 +1,8 @@
 package com.airevents.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -21,5 +23,7 @@ public class Race implements Serializable {
     private String distances;
 
     @ManyToMany(mappedBy = "races")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Set<User> users = new HashSet<>();
 }

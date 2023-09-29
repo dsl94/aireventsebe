@@ -52,6 +52,8 @@ public class RaceService {
         race.setRaceTitle(updated.getRaceTitle());
         race.setDistances(updated.getDistances());
 
+        raceRepository.save(race);
+
         return RaceMapper.entityToResponse(race);
     }
 

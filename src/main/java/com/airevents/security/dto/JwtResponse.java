@@ -12,6 +12,7 @@ import java.util.List;
 public class JwtResponse {
 
     private String token;
+    private Long id;
     private String expiration;
     private String email;
     private String fullName;

@@ -3,6 +3,8 @@ package com.airevents.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -52,6 +54,8 @@ public class User implements Serializable {
     @JoinTable(name = "user_race",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "race_id"))
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Set<Race> races = new HashSet<>();
 
     @CreationTimestamp
