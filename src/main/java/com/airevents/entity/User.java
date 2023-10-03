@@ -58,6 +58,11 @@ public class User implements Serializable {
     @EqualsAndHashCode.Exclude
     private Set<Race> races = new HashSet<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Set<RaceReport> raceReports = new HashSet<>();
+
     @CreationTimestamp
     @Column(name = "created_date")
     private LocalDateTime createDateTime;

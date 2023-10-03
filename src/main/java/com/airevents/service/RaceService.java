@@ -24,7 +24,7 @@ public class RaceService {
     private UserRepository userRepository;
 
     public List<RaceResponse> getAllRaces() {
-        return raceRepository.findAllByOrderByDateOfRaceDesc()
+        return raceRepository.findAllByOrderByDateOfRaceAsc()
                 .stream()
                 .map(RaceMapper::entityToResponse)
                 .collect(Collectors.toList());

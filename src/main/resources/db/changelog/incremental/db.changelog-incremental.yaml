@@ -3,3 +3,5 @@ databaseChangeLog:
       file: db/changelog/incremental/initial/initial.sql
   - include:
       file: db/changelog/incremental/races/races.sql
+  - include:
+      file: db/changelog/incremental/raceReport/raceReport.sql
