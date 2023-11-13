@@ -4,6 +4,7 @@ import com.airevents.dto.mapper.UserMapper;
 import com.airevents.dto.request.ChangePasswordRequest;
 import com.airevents.dto.request.CreateUserRequest;
 import com.airevents.dto.request.UpdateUserRequest;
+import com.airevents.dto.response.StravaResponse;
 import com.airevents.dto.response.UserResponse;
 import com.airevents.entity.Role;
 import com.airevents.entity.User;
@@ -77,6 +78,15 @@ public class UserService {
         user.setShirtSize(request.getShirtSize());
         user.setPhone(request.getPhone());
         user.setInfo(request.getInfo());
+
+        return UserMapper.entityToResponse(userRepository.save(user));
+    }
+
+    public UserResponse updateStrava(String username, StravaResponse stravaResponse) {
+        User user = userRepository.findByUsernameIgnoreCase(username);
+
+        user.setStravaId(String.valueOf(stravaResponse.getAthlete().getId()));
+        user.setStravaRefreshToken(stravaResponse.refresh_token);
 
         return UserMapper.entityToResponse(userRepository.save(user));
     }
