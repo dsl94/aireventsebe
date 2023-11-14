@@ -12,16 +12,26 @@ import com.airevents.error.ErrorCode;
 import com.airevents.error.RcnException;
 import com.airevents.repository.RoleRepository;
 import com.airevents.repository.UserRepository;
+import com.airevents.security.JwtTokenUtil;
 import com.airevents.security.RolesConstants;
+import com.airevents.security.dto.JwtResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UserService {
@@ -34,6 +44,14 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private RoleRepository roleRepository;
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+
+    @Autowired
+    private UserDetailsService userDetailsService;
 
     public List<UserResponse> getAllUsers() {
         return UserMapper
@@ -56,6 +74,46 @@ public class UserService {
         user.setRoles(Collections.singleton(role));
 
         userRepository.save(user);
+    }
+
+    public JwtResponse createStravaAccountAndOrLogin(StravaResponse stravaResponse) {
+        Role roleGuest = roleRepository.findByRoleIgnoreCase(RolesConstants.ROLE_GUEST.name());
+        String username = stravaResponse.getAthlete().getFirstname() + "_" + stravaResponse.getAthlete().getLastname() + "_" + stravaResponse.getAthlete().getId();
+        User user = userRepository.findByUsernameIgnoreCase(username);
+        if (user != null) {
+            return login(user);
+        } else {
+            user = new User();
+            user.setUsername(username);
+            user.setPassword(passwordEncoder.encode("S3cr3t"));
+            user.setFullName(stravaResponse.getAthlete().getFirstname() + " " + stravaResponse.getAthlete().getLastname());
+            user.setGender(stravaResponse.getAthlete().getSex());
+            user.setStravaId(String.valueOf(stravaResponse.getAthlete().getId()));
+            user.setStravaRefreshToken(stravaResponse.refresh_token);
+            user.setRoles(Set.of(roleGuest));
+            user = userRepository.save(user);
+            return login(user);
+        }
+    }
+
+    private JwtResponse login(User user) {
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                user.getUsername(), "S3cr3t"));
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
+        String token = jwtTokenUtil.generateToken(userDetails);
+
+        Date expiration = jwtTokenUtil.getExpirationDateFromToken(token);
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+
+        List<String> roles = new ArrayList<>();
+        for (GrantedAuthority authority : userDetails.getAuthorities()) {
+            roles.add(authority.getAuthority());
+        }
+
+        return new JwtResponse(token, user.getId(), dateFormat.format(expiration), user.getEmail(), user.getFullName(), roles);
     }
 
     public UserResponse update(Long userId, UpdateUserRequest request) {

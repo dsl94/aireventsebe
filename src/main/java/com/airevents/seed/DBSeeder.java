@@ -55,6 +55,11 @@ public class DBSeeder {
             user.setRole(RolesConstants.ROLE_USER.name());
             roleRepository.save(user);
 
+            Role guest = new Role();
+            guest.setName("Gost");
+            guest.setRole(RolesConstants.ROLE_USER.name());
+            roleRepository.save(guest);
+
             Role systemAdmin = new Role();
             systemAdmin.setName("Sistemski administrator");
             systemAdmin.setRole(RolesConstants.ROLE_SYSTEM_ADMIN.name());

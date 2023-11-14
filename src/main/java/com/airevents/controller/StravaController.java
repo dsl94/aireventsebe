@@ -3,6 +3,7 @@ package com.airevents.controller;
 import com.airevents.dto.request.StravaCodeRequest;
 import com.airevents.dto.response.StravaResponse;
 import com.airevents.dto.response.UserResponse;
+import com.airevents.security.dto.JwtResponse;
 import com.airevents.service.UserService;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,19 +33,14 @@ public class StravaController {
 
     @Autowired
     private UserService userService;
-    @PostMapping
+    @PostMapping("/login")
     private ResponseEntity<?> loginWithStrava(@RequestBody StravaCodeRequest body) throws IOException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserResponse userResponse = new UserResponse();
+        JwtResponse jwtResponse = new JwtResponse();
         String urlString = "https://www.strava.com/oauth/token?client_id=116659&client_secret=f2699193cc92b28b75a0db52fcb522704f637121&code="+body.getCode()+"&grant_type=authorization_code";
         CloseableHttpClient httpClient = HttpClients.createDefault();
         try {
 
             HttpPost request = new HttpPost(urlString);
-
-            // add request headers
-//            request.addHeader("custom-key", "mkyong");
-//            request.addHeader(HttpHeaders.USER_AGENT, "Googlebot");
 
             CloseableHttpResponse response = httpClient.execute(request);
 
@@ -62,7 +59,7 @@ public class StravaController {
                     ObjectMapper objectMapper = new ObjectMapper();
                     objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
                     StravaResponse stravaResponse = objectMapper.readValue(result, StravaResponse.class);
-                    userResponse = userService.updateStrava(authentication.getName(), stravaResponse);
+                    jwtResponse = userService.createStravaAccountAndOrLogin(stravaResponse);
                 }
 
             } finally {
@@ -71,6 +68,9 @@ public class StravaController {
         } finally {
             httpClient.close();
         }
-        return ResponseEntity.ok(userResponse);
+        if (jwtResponse.getToken() == null) {
+            throw new UsernameNotFoundException("Greska sa prijavom");
+        }
+        return ResponseEntity.ok(jwtResponse);
     }
 }
