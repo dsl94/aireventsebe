@@ -4,10 +4,12 @@ import com.airevents.dto.request.ChallengeRequest;
 import com.airevents.dto.request.RaceRequest;
 import com.airevents.dto.response.ChallengeResponse;
 import com.airevents.dto.response.RaceResponse;
+import com.airevents.dto.response.UserChallengeResponse;
 import com.airevents.dto.response.UserRaceResponse;
 import com.airevents.entity.Challenge;
 import com.airevents.entity.Race;
 import com.airevents.entity.User;
+import com.airevents.entity.UserChallenge;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -36,11 +38,11 @@ public class ChallengeMapper {
                 entity.getStartDate().format(DATE_FORMATTER),
                 entity.getEndDate().format(DATE_FORMATTER),
                 entity.getLastSync() == null ? "Do sada nije sinhronizovano" : entity.getLastSync().format(DATE_FORMATTER),
-                getUsers(entity.getUsers())
+                getUsers(entity.getUserChallenges())
         );
     }
 
-    public static List<UserRaceResponse> getUsers(Set<User> users) {
-        return users.stream().map(u -> new UserRaceResponse(u.getId(), u.getFullName())).collect(Collectors.toList());
+    public static List<UserChallengeResponse> getUsers(Set<UserChallenge> users) {
+        return users.stream().map(u -> new UserChallengeResponse(u.getUser().getId(), u.getUser().getFullName(), u.getDistance())).collect(Collectors.toList());
     }
 }

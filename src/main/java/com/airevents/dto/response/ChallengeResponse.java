@@ -17,5 +17,5 @@ public class ChallengeResponse {
     private String endDate;
     private String lastSync;
 
-    private List<UserRaceResponse> users;
+    private List<UserChallengeResponse> users;
 }

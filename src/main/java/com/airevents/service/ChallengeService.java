@@ -9,10 +9,12 @@ import com.airevents.dto.response.RaceResponse;
 import com.airevents.entity.Challenge;
 import com.airevents.entity.Race;
 import com.airevents.entity.User;
+import com.airevents.entity.UserChallenge;
 import com.airevents.error.ErrorCode;
 import com.airevents.error.RcnException;
 import com.airevents.repository.ChallengeRepository;
 import com.airevents.repository.RaceRepository;
+import com.airevents.repository.UserChallengeRepository;
 import com.airevents.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,8 @@ public class ChallengeService {
     private ChallengeRepository challengeRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private UserChallengeRepository userChallengeRepository;
 
     public List<ChallengeResponse> getAll() {
         return challengeRepository.findAllByOrderByStartDateDesc()
@@ -75,10 +79,12 @@ public class ChallengeService {
 
         User user = userRepository.findByUsernameIgnoreCase(username);
 
-        user.addChallenge(challenge);
+        UserChallenge userChallenge = new UserChallenge();
+        userChallenge.setChallenge(challenge);
+        userChallenge.setUser(user);
+        userChallengeRepository.saveAndFlush(userChallenge);
 
         userRepository.saveAndFlush(user);
-        challenge = challengeRepository.saveAndFlush(challenge);
 
         return ChallengeMapper.entityToResponse(challenge);
     }
@@ -89,10 +95,10 @@ public class ChallengeService {
 
         User user = userRepository.findByUsernameIgnoreCase(username);
 
-        user.removeChallenge(challenge);
+        UserChallenge uc = userChallengeRepository.findByChallengeAndUser(challenge, user)
+                .orElseThrow(() -> new RcnException(ErrorCode.NOT_FOUND, "Greska"));
 
-        userRepository.saveAndFlush(user);
-        challenge = challengeRepository.saveAndFlush(challenge);
+        userChallengeRepository.delete(uc);
 
         return ChallengeMapper.entityToResponse(challenge);
     }

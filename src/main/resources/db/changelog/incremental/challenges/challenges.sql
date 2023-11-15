@@ -7,7 +7,8 @@ CREATE TABLE challenge (
 );
 
 CREATE TABLE user_challenge (
+                                id SERIAL PRIMARY KEY,
                                 user_id BIGINT REFERENCES users(id),
                                 challenge_id BIGINT REFERENCES challenge(id),
-                                PRIMARY KEY (user_id, challenge_id)
+                                distance DECIMAL DEFAULT 0
 );

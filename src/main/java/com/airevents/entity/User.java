@@ -57,18 +57,16 @@ public class User implements Serializable {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Set<Race> races = new HashSet<>();
-    @ManyToMany
-    @JoinTable(name = "user_challenge",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "challenge_id"))
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    private Set<Challenge> challenges = new HashSet<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Set<RaceReport> raceReports = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Set<UserChallenge> userChallenges = new HashSet<>();
 
     @CreationTimestamp
     @Column(name = "created_date")
@@ -94,13 +92,5 @@ public class User implements Serializable {
 
     public void removeRace(Race race) {
         this.races.remove(race);
-    }
-
-    public void addChallenge(Challenge challenge) {
-        this.challenges.add(challenge);
-    }
-
-    public void removeChallenge(Challenge challenge) {
-        this.challenges.remove(challenge);
     }
 }
