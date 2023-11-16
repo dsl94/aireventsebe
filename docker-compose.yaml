@@ -1,0 +1,22 @@
+version: '3.3'
+services:
+  rcnapp:
+    image: rcnapp
+    restart: always
+    networks:
+      - my-network
+  rcnappui:
+    image: cloud.canister.io:5000/hyh/rcnapp
+    restart: always
+    networks:
+      - my-network
+  nginx-proxy:
+    build:
+      context: ./proxy
+    ports:
+      - "80:80"
+    networks:
+      - my-network
+
+networks:
+  my-network:
