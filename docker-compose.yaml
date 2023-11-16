@@ -6,7 +6,7 @@ services:
     networks:
       - my-network
   rcnappui:
-    image: cloud.canister.io:5000/hyh/rcnapp
+    image: registry.gitlab.com/dsl94/rcnapp
     restart: always
     networks:
       - my-network
