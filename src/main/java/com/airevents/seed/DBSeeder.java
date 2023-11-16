@@ -73,10 +73,10 @@ public class DBSeeder {
             Role systemAdminRole = roleRepository.findByRoleIgnoreCase(RolesConstants.ROLE_SYSTEM_ADMIN.name());
 
             User systemAdmin = new User();
-            systemAdmin.setFullName("System Admin");
-            systemAdmin.setEmail("systemadmin@mail.com");
-            systemAdmin.setUsername("systemAdmin");
-            systemAdmin.setPassword(passwordEncoder.encode("systemadmin"));
+            systemAdmin.setFullName("Djordje Andjelkovic");
+            systemAdmin.setEmail("andjelkovicdjordje@gmail.com");
+            systemAdmin.setUsername("andjelkovicdjordje@gmail.com");
+            systemAdmin.setPassword(passwordEncoder.encode("bythefly"));
             systemAdmin.setActive(true);
             systemAdmin.setRoles(Collections.singleton(systemAdminRole));
             userRepository.save(systemAdmin);
