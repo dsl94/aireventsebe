@@ -24,4 +24,5 @@ public class UserResponse {
     private String membershipUntil;
     private String firstLoginDate;
     private String lastLoginDate;
+    private boolean stravaLogin;
 }

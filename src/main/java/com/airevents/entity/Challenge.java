@@ -24,7 +24,7 @@ public class Challenge implements Serializable {
     private LocalDateTime endDate;
     @Column(name = "last_sync")
     private LocalDateTime lastSync;
-    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "challenge", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Set<UserChallenge> userChallenges = new HashSet<>();

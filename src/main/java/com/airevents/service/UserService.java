@@ -54,9 +54,36 @@ public class UserService {
     private UserDetailsService userDetailsService;
 
     public List<UserResponse> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        List<User> members = new ArrayList<>();
+        for (User u: users) {
+            for (Role r: u.getRoles()) {
+                if (!r.getRole().equals(RolesConstants.ROLE_GUEST.name())) {
+                    members.add(u);
+                    break;
+                }
+            }
+        }
         return UserMapper
                 .entityToResponse(
-                        userRepository.findAll()
+                        members
+                );
+    }
+
+    public List<UserResponse> guests() {
+        List<User> users = userRepository.findAll();
+        List<User> members = new ArrayList<>();
+        for (User u: users) {
+            for (Role r: u.getRoles()) {
+                if (r.getRole().equals(RolesConstants.ROLE_GUEST.name())) {
+                    members.add(u);
+                    break;
+                }
+            }
+        }
+        return UserMapper
+                .entityToResponse(
+                        members
                 );
     }
 
@@ -113,7 +140,7 @@ public class UserService {
             roles.add(authority.getAuthority());
         }
 
-        return new JwtResponse(token, user.getId(), dateFormat.format(expiration), user.getEmail(), user.getFullName(), roles);
+        return new JwtResponse(token, user.getId(), dateFormat.format(expiration), user.getEmail(), user.getFullName(), roles, true, user.getStravaRefreshToken() != null && !user.getStravaRefreshToken().isEmpty());
     }
 
     public UserResponse update(Long userId, UpdateUserRequest request) {

@@ -21,6 +21,11 @@ public class UserController {
     public ResponseEntity<List<UserResponse>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
+
+    @GetMapping("/guests")
+    public ResponseEntity<List<UserResponse>> getAllGuests() {
+        return ResponseEntity.ok(userService.guests());
+    }
     @PostMapping()
     public ResponseEntity<Void> createUser(@RequestBody CreateUserRequest request) {
         userService.createUser(request);

@@ -45,7 +45,8 @@ public class UserMapper {
                 entity.getUpdateDateTime().format(DATE_TIME_FORMATTER),
                 entity.getMembershipUntil() == null ? null : entity.getMembershipUntil().format(DATE_FORMATTER),
                 entity.getFirstLoginDate() == null ? null : entity.getFirstLoginDate().format(DATE_TIME_FORMATTER),
-                entity.getLastLoginDate() == null ? null : entity.getLastLoginDate().format(DATE_TIME_FORMATTER)
+                entity.getLastLoginDate() == null ? null : entity.getLastLoginDate().format(DATE_TIME_FORMATTER),
+                entity.getStravaId() != null && entity.getUsername().contains("_") && !entity.getUsername().equals(entity.getEmail())
         );
     }
 

@@ -17,5 +17,6 @@ public class JwtResponse {
     private String email;
     private String fullName;
     private List<String> roles;
-
+    private boolean stravaLogin;
+    private boolean hasStrava;
 }

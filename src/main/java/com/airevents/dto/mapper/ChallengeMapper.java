@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 
 public class ChallengeMapper {
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
     private static final DateTimeFormatter REQUEST_DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     public static Challenge requestToEntity(ChallengeRequest request) {
         Challenge challenge = new Challenge();
@@ -37,7 +38,7 @@ public class ChallengeMapper {
                 entity.getTitle(),
                 entity.getStartDate().format(DATE_FORMATTER),
                 entity.getEndDate().format(DATE_FORMATTER),
-                entity.getLastSync() == null ? "Do sada nije sinhronizovano" : entity.getLastSync().format(DATE_FORMATTER),
+                entity.getLastSync() == null ? "Do sada nije sinhronizovano" : entity.getLastSync().format(DATE_TIME_FORMATTER),
                 getUsers(entity.getUserChallenges())
         );
     }
