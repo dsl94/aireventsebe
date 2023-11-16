@@ -28,7 +28,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 @RestController
-@RequestMapping("/strava")
+@RequestMapping("/api/strava")
 public class StravaController {
 
     @Autowired

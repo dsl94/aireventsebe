@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/challenge")
+@RequestMapping("/api/challenge")
 public class ChallengeController {
 
     @Autowired
