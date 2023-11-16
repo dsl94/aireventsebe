@@ -69,11 +69,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.js"
                 ).permitAll()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .antMatchers("/sys-admin/*").hasAnyRole("SYSTEM_ADMIN")
-                .antMatchers("/profile/**").authenticated()
-                .antMatchers("/race/**").authenticated()
-                .antMatchers("/challenge/**").authenticated()
-                .antMatchers("/race-report/**").authenticated()
+                .antMatchers("/api/sys-admin/*").hasAnyRole("SYSTEM_ADMIN")
+                .antMatchers("/api/profile/**").authenticated()
+                .antMatchers("/api/race/**").authenticated()
+                .antMatchers("/api/challenge/**").authenticated()
+                .antMatchers("/api/race-report/**").authenticated()
 //                .antMatchers("/user/**").hasAnyRole("USER", "ADMIN")
 //                .antMatchers("/airline/user/**").hasAnyRole("USER", "ADMIN")
 //                .antMatchers("/airline/admin/**").hasRole("ADMIN")
@@ -85,11 +85,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .antMatchers("/account").authenticated()
 
                 //allow anonymous auth requests
-                .antMatchers("/flight/**").permitAll()
-                .antMatchers("/strava/**").permitAll()
-                .antMatchers("/auth/**").permitAll()
-                .antMatchers("/password/**").permitAll()
-                .antMatchers("/reset/**").hasAnyRole("SYSTEM_ADMIN")
+                .antMatchers("/api/flight/**").permitAll()
+                .antMatchers("/api/strava/**").permitAll()
+                .antMatchers("/api/auth/**").permitAll()
+                .antMatchers("/api/password/**").permitAll()
+                .antMatchers("/api/reset/**").hasAnyRole("SYSTEM_ADMIN")
 
                 //authenticated requests
                 .anyRequest().authenticated();
