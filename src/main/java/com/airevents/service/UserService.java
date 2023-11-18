@@ -106,7 +106,7 @@ public class UserService {
     public JwtResponse createStravaAccountAndOrLogin(StravaResponse stravaResponse) {
         Role roleGuest = roleRepository.findByRoleIgnoreCase(RolesConstants.ROLE_GUEST.name());
         String username = stravaResponse.getAthlete().getFirstname() + "_" + stravaResponse.getAthlete().getLastname() + "_" + stravaResponse.getAthlete().getId();
-        User user = userRepository.findByStravaIdIgnoreCase(username);
+        User user = userRepository.findByStravaIdIgnoreCase(String.valueOf(stravaResponse.getAthlete().getId()));
         if (user != null) {
             return login(user);
         } else {
@@ -125,7 +125,7 @@ public class UserService {
 
     private JwtResponse login(User user) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                user.getUsername(), user.getPassword()));
+                user.getUsername(), "S3cr3t"));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 

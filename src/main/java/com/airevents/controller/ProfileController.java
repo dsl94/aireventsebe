@@ -2,6 +2,7 @@ package com.airevents.controller;
 
 import com.airevents.dto.request.ChangePasswordRequest;
 import com.airevents.dto.request.UpdateUserRequest;
+import com.airevents.dto.response.StravaResponse;
 import com.airevents.dto.response.UserResponse;
 import com.airevents.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,14 @@ public class ProfileController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String authenticatedUserName = authentication.getName();
         return ResponseEntity.ok(userService.updateProfile(authenticatedUserName, request));
+    }
+
+    @PostMapping("/strava")
+    public ResponseEntity<UserResponse> updateStrava(@RequestBody StravaResponse request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String authenticatedUserName = authentication.getName();
+        userService.updateStrava(authenticatedUserName, request);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/password")
