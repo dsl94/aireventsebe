@@ -7,5 +7,6 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     User findByUsernameIgnoreCase(String username);
+    User findByStravaIdIgnoreCase(String stravaId);
     Optional<User> findByEmailIgnoreCase(String email);
 }
