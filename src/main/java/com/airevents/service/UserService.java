@@ -103,9 +103,12 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public JwtResponse createStravaAccountAndOrLogin(StravaResponse stravaResponse) {
+    public JwtResponse createStravaAccountAndOrLogin(StravaResponse stravaResponse, String authUser) {
         Role roleGuest = roleRepository.findByRoleIgnoreCase(RolesConstants.ROLE_GUEST.name());
         String username = stravaResponse.getAthlete().getFirstname() + "_" + stravaResponse.getAthlete().getLastname() + "_" + stravaResponse.getAthlete().getId();
+        if (authUser != null) {
+            username = authUser;
+        }
         User user = userRepository.findByUsernameIgnoreCase(username);
         if (user != null) {
             return login(user);
