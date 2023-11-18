@@ -36,12 +36,15 @@ public class StravaController {
     private UserService userService;
     @PostMapping("/login")
     public ResponseEntity<?> loginWithStrava(@RequestBody StravaResponse body) throws IOException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String authenticatedUserName = null;
-        if (authentication != null) {
-            authenticatedUserName = authentication.getName();
-        }
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication != null) {
+                authenticatedUserName = authentication.getName();
+            }
+        } catch (Exception e) {
 
+        }
 
 //        JwtResponse jwtResponse = new JwtResponse();
 //        String urlString = "https://www.strava.com/oauth/token?client_id=116659&client_secret=f2699193cc92b28b75a0db52fcb522704f637121&code="+body.getCode()+"&grant_type=authorization_code";
