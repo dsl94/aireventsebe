@@ -125,7 +125,7 @@ public class UserService {
 
     private JwtResponse login(User user) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                user.getUsername(), "S3cr3t"));
+                user.getUsername(), user.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
