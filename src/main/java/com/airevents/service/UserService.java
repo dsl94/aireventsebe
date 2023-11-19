@@ -3,6 +3,7 @@ package com.airevents.service;
 import com.airevents.dto.mapper.UserMapper;
 import com.airevents.dto.request.ChangePasswordRequest;
 import com.airevents.dto.request.CreateUserRequest;
+import com.airevents.dto.request.GuestConvertRequest;
 import com.airevents.dto.request.UpdateUserRequest;
 import com.airevents.dto.response.StravaResponse;
 import com.airevents.dto.response.UserResponse;
@@ -100,6 +101,15 @@ public class UserService {
         Role role = roleRepository.findByRoleIgnoreCase(RolesConstants.ROLE_USER.name());
         user.setRoles(Collections.singleton(role));
 
+        userRepository.save(user);
+    }
+
+    public void convertGuest(Long id, GuestConvertRequest request) {
+        Role roleUser = roleRepository.findByRoleIgnoreCase(RolesConstants.ROLE_USER.name());
+        User user = userRepository.findById(id).orElseThrow(() -> new RcnException(ErrorCode.NOT_FOUND, "Korisnik ne postoji"));
+        user.setRoles(Set.of(roleUser));
+        user.setEmail(request.getEmail());
+        user.setMembershipUntil(LocalDate.parse(request.getMembershipUntil(), REQUEST_DATE_FORMAT).atStartOfDay());
         userRepository.save(user);
     }
 

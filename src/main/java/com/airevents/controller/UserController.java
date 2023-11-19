@@ -1,6 +1,7 @@
 package com.airevents.controller;
 
 import com.airevents.dto.request.CreateUserRequest;
+import com.airevents.dto.request.GuestConvertRequest;
 import com.airevents.dto.request.UpdateUserRequest;
 import com.airevents.dto.response.UserResponse;
 import com.airevents.service.UserService;
@@ -35,6 +36,12 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<UserResponse> updateUser(@RequestBody UpdateUserRequest request, @PathVariable Long id) {
         return ResponseEntity.ok(userService.update(id, request));
+    }
+
+    @PutMapping("/{id}/convert")
+    public ResponseEntity<Void> convertUser(@RequestBody GuestConvertRequest request, @PathVariable Long id) {
+        userService.convertGuest(id, request);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{id}")
