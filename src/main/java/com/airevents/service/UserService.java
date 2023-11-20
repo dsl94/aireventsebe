@@ -107,7 +107,7 @@ public class UserService {
     public void convertGuest(Long id, GuestConvertRequest request) {
         Role roleUser = roleRepository.findByRoleIgnoreCase(RolesConstants.ROLE_USER.name());
         User user = userRepository.findById(id).orElseThrow(() -> new RcnException(ErrorCode.NOT_FOUND, "Korisnik ne postoji"));
-        user.setRoles(Set.of(roleUser));
+        user.setRoles(new HashSet<>(Arrays.asList(roleUser)));
         user.setEmail(request.getEmail());
         user.setMembershipUntil(LocalDate.parse(request.getMembershipUntil(), REQUEST_DATE_FORMAT).atStartOfDay());
         userRepository.save(user);
