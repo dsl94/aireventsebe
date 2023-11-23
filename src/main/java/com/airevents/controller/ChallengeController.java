@@ -59,7 +59,7 @@ public class ChallengeController {
     public ResponseEntity<ChallengeResponse> dontGoToRace(@PathVariable Long id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String authenticatedUserName = authentication.getName();
-
-        return ResponseEntity.ok(challengeService.retractFrom(authenticatedUserName, id));
+        challengeService.retractFrom(authenticatedUserName, id);
+        return ResponseEntity.ok().build();
     }
 }

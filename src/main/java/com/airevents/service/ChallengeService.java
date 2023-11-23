@@ -99,6 +99,8 @@ public class ChallengeService {
                 .orElseThrow(() -> new RcnException(ErrorCode.NOT_FOUND, "Greska"));
 
         userChallengeRepository.delete(uc);
+        challengeRepository.saveAndFlush(challenge);
+        userRepository.saveAndFlush(user);
 
         return ChallengeMapper.entityToResponse(challenge);
     }
