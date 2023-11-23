@@ -89,8 +89,8 @@ public class ChallengeService {
         return ChallengeMapper.entityToResponse(challenge);
     }
 
-    public ChallengeResponse retractFrom(String username, Long raceId) {
-        Challenge challenge = challengeRepository.findById(raceId)
+    public ChallengeResponse retractFrom(String username, Long challengeId) {
+        Challenge challenge = challengeRepository.findById(challengeId)
                 .orElseThrow(() -> new RcnException(ErrorCode.NOT_FOUND, "Izazov nije pronadjen"));
 
         User user = userRepository.findByUsernameIgnoreCase(username);
@@ -98,9 +98,7 @@ public class ChallengeService {
         UserChallenge uc = userChallengeRepository.findByChallengeAndUser(challenge, user)
                 .orElseThrow(() -> new RcnException(ErrorCode.NOT_FOUND, "Greska"));
 
-        userChallengeRepository.delete(uc);
-        challengeRepository.saveAndFlush(challenge);
-        userRepository.saveAndFlush(user);
+        userChallengeRepository.deleteById(uc.getId());
 
         return ChallengeMapper.entityToResponse(challenge);
     }

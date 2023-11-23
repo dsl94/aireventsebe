@@ -63,7 +63,7 @@ public class User implements Serializable {
     @EqualsAndHashCode.Exclude
     private Set<RaceReport> raceReports = new HashSet<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Set<UserChallenge> userChallenges = new HashSet<>();
