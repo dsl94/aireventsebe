@@ -11,4 +11,5 @@ public class UserChallengeResponse {
     private Long id;
     private String name;
     private double distance;
+    private boolean male;
 }

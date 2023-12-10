@@ -44,6 +44,6 @@ public class ChallengeMapper {
     }
 
     public static List<UserChallengeResponse> getUsers(Set<UserChallenge> users) {
-        return users.stream().map(u -> new UserChallengeResponse(u.getUser().getId(), u.getUser().getFullName(), u.getDistance())).collect(Collectors.toList());
+        return users.stream().map(u -> new UserChallengeResponse(u.getUser().getId(), u.getUser().getFullName(), u.getDistance(), "M".equals(u.getUser().getGender()))).collect(Collectors.toList());
     }
 }
