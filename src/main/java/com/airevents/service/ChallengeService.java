@@ -165,7 +165,7 @@ public class ChallengeService {
                     objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
                     List<StravaActivityResponse> activities = objectMapper.readValue(result, objectMapper.getTypeFactory().constructCollectionType(List.class, StravaActivityResponse.class));
                     for (StravaActivityResponse activity : activities) {
-                        if (activity.getSport_type().equals("Run")) {
+                        if (activity.getSport_type().equals("Run") || activity.getSport_type().equals(" VirtualRun")) {
                             distance += activity.getDistance();
                         }
                     }
