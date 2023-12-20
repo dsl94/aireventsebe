@@ -62,4 +62,10 @@ public class ChallengeController {
         challengeService.retractFrom(authenticatedUserName, id);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/{id}/sync")
+    public ResponseEntity<ChallengeResponse> sync(@PathVariable Long id) {
+        challengeService.syncChallenge(id);
+        return ResponseEntity.ok().build();
+    }
 }

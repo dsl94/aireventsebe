@@ -78,6 +78,7 @@ public class StravaSync {
             CloseableHttpResponse response = httpClient.execute(request);
 
             try {
+                System.out.println(" Sync Result for user: " + user.getFullName());
 
                 // Get HttpResponse Status
                 System.out.println(response.getProtocolVersion());              // HTTP/1.1
