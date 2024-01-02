@@ -54,7 +54,7 @@ public class ChallengeMapper {
         MapType mapType = factory.constructMapType(HashMap.class, String.class, Double.class);
         return users.stream().map(u -> {
             try {
-                return new UserChallengeResponse(u.getUser().getId(), u.getUser().getFullName(), u.getDistance(), "M".equals(u.getUser().getGender()), mapper.readValue(u.getPerMonth(), mapType));
+                return new UserChallengeResponse(u.getUser().getId(), u.getUser().getFullName(), u.getDistance(), "M".equals(u.getUser().getGender()), u.getPerMonth() != null ? mapper.readValue(u.getPerMonth(), mapType) : null);
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }
