@@ -132,7 +132,7 @@ public class ChallengeService {
                     uc.setPerMonth(ow.writeValueAsString(response.getByMonth()));
                     userChallengeRepository.saveAndFlush(uc);
                 } catch (IOException e) {
-
+                    System.out.println(e);
                 }
             }
             challenge.setLastSync(LocalDateTime.now());
