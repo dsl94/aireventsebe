@@ -14,5 +14,5 @@ public class UserChallengeResponse {
     private String name;
     private double distance;
     private boolean male;
-    private String perMonth;
+    private Map<String, Double> perMonth;
 }

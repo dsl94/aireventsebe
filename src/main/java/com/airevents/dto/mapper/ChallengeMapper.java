@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -52,12 +53,16 @@ public class ChallengeMapper {
         ObjectMapper mapper = new ObjectMapper();
         TypeFactory factory = TypeFactory.defaultInstance();
         MapType mapType = factory.constructMapType(HashMap.class, String.class, Double.class);
-        return users.stream().map(u -> {
+        List<UserChallengeResponse> list = new ArrayList<>();
+        for (UserChallenge u : users) {
+            UserChallengeResponse userChallengeResponse = null;
             try {
-                return new UserChallengeResponse(u.getUser().getId(), u.getUser().getFullName(), u.getDistance(), "M".equals(u.getUser().getGender()), u.getPerMonth() != null ? mapper.readValue(u.getPerMonth(), mapType) : null);
+                userChallengeResponse = new UserChallengeResponse(u.getUser().getId(), u.getUser().getFullName(), u.getDistance(), "M".equals(u.getUser().getGender()), u.getPerMonth() != null ? mapper.readValue(u.getPerMonth(), mapType) : null);
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }
-        }).collect(Collectors.toList());
+            list.add(userChallengeResponse);
+        }
+        return list;
     }
 }
