@@ -24,4 +24,6 @@ public class UserChallenge {
     @EqualsAndHashCode.Exclude
     private Challenge challenge;
     private double distance;
+    @Column(name = "per_month")
+    private String perMonth;
 }

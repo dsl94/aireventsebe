@@ -10,11 +10,16 @@ import com.airevents.entity.Challenge;
 import com.airevents.entity.Race;
 import com.airevents.entity.User;
 import com.airevents.entity.UserChallenge;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.MapType;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -44,6 +49,15 @@ public class ChallengeMapper {
     }
 
     public static List<UserChallengeResponse> getUsers(Set<UserChallenge> users) {
-        return users.stream().map(u -> new UserChallengeResponse(u.getUser().getId(), u.getUser().getFullName(), u.getDistance(), "M".equals(u.getUser().getGender()))).collect(Collectors.toList());
+        ObjectMapper mapper = new ObjectMapper();
+        TypeFactory factory = TypeFactory.defaultInstance();
+        MapType mapType = factory.constructMapType(HashMap.class, String.class, Double.class);
+        return users.stream().map(u -> {
+            try {
+                return new UserChallengeResponse(u.getUser().getId(), u.getUser().getFullName(), u.getDistance(), "M".equals(u.getUser().getGender()), mapper.readValue(u.getPerMonth(), mapType));
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+        }).collect(Collectors.toList());
     }
 }

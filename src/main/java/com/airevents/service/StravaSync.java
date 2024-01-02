@@ -13,6 +13,7 @@ import com.airevents.repository.UserChallengeRepository;
 import com.airevents.repository.UserRepository;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -27,12 +28,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.util.List;
-import java.util.Set;
+import java.time.*;
+import java.util.*;
 
 @Component
 public class StravaSync {
@@ -46,6 +43,7 @@ public class StravaSync {
 
     @Scheduled(cron = "0 0 0 * * *")
     public void trackOverduePayments() {
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         System.out.println("Syncing strava!!!!");
         List<Challenge> challenges = challengeRepository.findAllByOrderByStartDateDesc();
         for (Challenge challenge : challenges) {
@@ -53,8 +51,9 @@ public class StravaSync {
                 Set<UserChallenge> users = challenge.getUserChallenges();
                 for (UserChallenge uc : users) {
                     try {
-                        double distance = sync(uc.getUser(), challenge.getStartDate(), challenge.getEndDate());
-                        uc.setDistance(distance);
+                        CalculationResponse response = sync(uc.getUser(), challenge.getStartDate(), challenge.getEndDate());
+                        uc.setDistance(response.getTotalDistance());
+                        uc.setPerMonth(ow.writeValueAsString(response.getByMonth()));
                         userChallengeRepository.saveAndFlush(uc);
                     } catch (IOException e) {
 
@@ -66,11 +65,17 @@ public class StravaSync {
         }
     }
 
-    private Double sync(User user, LocalDateTime startDate, LocalDateTime endDate) throws IOException {
+    private CalculationResponse sync(User user, LocalDateTime startDate, LocalDateTime endDate) throws IOException {
         String activitiesUrl = "https://www.strava.com/api/v3/athlete/activities?before=" + endDate.atZone(ZoneId.systemDefault()).toEpochSecond() + "&after=" + startDate.atZone(ZoneId.systemDefault()).toEpochSecond() + "&per_page=200";
         String token = login(user.getStravaRefreshToken());
         CloseableHttpClient httpClient = HttpClients.createDefault();
+        List<YearMonth> monthsBetween = getMonthsBetween(startDate, endDate);
         double distance = 0;
+        Map<String, Double> distancePerMonth = new HashMap<>();
+
+        for (YearMonth month : monthsBetween) {
+            distancePerMonth.put(month.getMonth().name(), 0.0); // Initialize distances for each month as 0.0
+        }
         try {
 
             HttpGet request = new HttpGet(activitiesUrl);
@@ -94,7 +99,13 @@ public class StravaSync {
                     objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
                     List<StravaActivityResponse> activities = objectMapper.readValue(result, objectMapper.getTypeFactory().constructCollectionType(List.class, StravaActivityResponse.class));
                     for (StravaActivityResponse activity : activities) {
-                        if (activity.getSport_type().equals("Run")) {
+                        if (activity.getSport_type().equals("Run") || activity.getSport_type().equals("VirtualRun")) {
+                            LocalDateTime activityDate = activity.getStart_date_local(); // Assuming StravaActivityResponse has a method to get activity date
+                            YearMonth activityYearMonth = YearMonth.from(activityDate);
+                            String monthName = activityYearMonth.getMonth().name();
+                            double distanceOfMonth = distancePerMonth.getOrDefault(monthName, 0.0);
+                            distanceOfMonth += activity.getDistance();
+                            distancePerMonth.put(monthName, distanceOfMonth);
                             distance += activity.getDistance();
                         }
                     }
@@ -107,7 +118,8 @@ public class StravaSync {
             httpClient.close();
         }
 
-        return distance/1000;
+        double total =  distance/1000;
+        return new CalculationResponse(total, distancePerMonth);
     }
 
     private String login(String refreshToken) throws IOException {
@@ -149,5 +161,21 @@ public class StravaSync {
         }
 
         return token;
+    }
+
+    public List<YearMonth> getMonthsBetween(LocalDateTime startDate, LocalDateTime endDate) {
+        List<YearMonth> monthsList = new ArrayList<>();
+
+        YearMonth startYearMonth = YearMonth.from(startDate);
+        YearMonth endYearMonth = YearMonth.from(endDate);
+
+        YearMonth currentYearMonth = startYearMonth;
+
+        while (!currentYearMonth.isAfter(endYearMonth)) {
+            monthsList.add(currentYearMonth);
+            currentYearMonth = currentYearMonth.plusMonths(1);
+        }
+
+        return monthsList;
     }
 }
