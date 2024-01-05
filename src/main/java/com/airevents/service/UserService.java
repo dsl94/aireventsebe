@@ -31,6 +31,7 @@ import org.springframework.stereotype.Service;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -149,6 +150,9 @@ public class UserService {
         for (GrantedAuthority authority : userDetails.getAuthorities()) {
             roles.add(authority.getAuthority());
         }
+
+        user.setLastLoginDate(LocalDateTime.now());
+        userRepository.saveAndFlush(user);
 
         return new JwtResponse(token, user.getId(), dateFormat.format(expiration), user.getEmail(), user.getFullName(), roles, true, user.getStravaRefreshToken() != null && !user.getStravaRefreshToken().isEmpty());
     }
