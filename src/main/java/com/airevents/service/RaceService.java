@@ -9,9 +9,11 @@ import com.airevents.error.ErrorCode;
 import com.airevents.error.RcnException;
 import com.airevents.repository.RaceRepository;
 import com.airevents.repository.UserRepository;
+import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,7 +26,9 @@ public class RaceService {
     private UserRepository userRepository;
 
     public List<RaceResponse> getAllRaces() {
-        return raceRepository.findAllByOrderByDateOfRaceAsc()
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime monthBefore = now.minusMonths(1);
+        return raceRepository.findAllByDateOfRaceAfterOrderByDateOfRaceAsc(monthBefore)
                 .stream()
                 .map(RaceMapper::entityToResponse)
                 .collect(Collectors.toList());
