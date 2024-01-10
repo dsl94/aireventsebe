@@ -174,7 +174,8 @@ public class ChallengeService {
                     objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
                     List<StravaActivityResponse> activities = objectMapper.readValue(result, objectMapper.getTypeFactory().constructCollectionType(List.class, StravaActivityResponse.class));
                     for (StravaActivityResponse activity : activities) {
-                        if (activity.getSport_type().equals("Run") || activity.getSport_type().equals("VirtualRun")) {
+                        if (activity.getSport_type().equals("Run") || activity.getSport_type().equals("VirtualRun")
+                                || activity.getSport_type().equals("TrailRun")) {
                             LocalDateTime activityDate = activity.getStart_date_local(); // Assuming StravaActivityResponse has a method to get activity date
                             YearMonth activityYearMonth = YearMonth.from(activityDate);
                             String monthName = activityYearMonth.getMonth().name();
