@@ -32,6 +32,12 @@ public class DBSeeder {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private RaceTypeRepository raceTypeRepository;
+    @Autowired
+    private RaceDistanceRepository raceDistanceRepository;
+    @Autowired
+    private RaceV2Repository raceV2Repository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -40,6 +46,8 @@ public class DBSeeder {
     public void seed(ContextRefreshedEvent event) throws IOException {
         seedRolesTable();
         seedUsersTable();
+        seedRaceTypes();
+        seedDistances();
     }
 
     private void seedRolesTable() {
@@ -80,6 +88,118 @@ public class DBSeeder {
             systemAdmin.setActive(true);
             systemAdmin.setRoles(Collections.singleton(systemAdminRole));
             userRepository.save(systemAdmin);
+        }
+    }
+
+    private void seedRaceTypes() {
+        if (raceTypeRepository.findAll().size() == 0) {
+            logger.info("Seeding race types");
+
+            RaceType road = new RaceType();
+            road.setName("Drumsko trčanje");
+            raceTypeRepository.saveAndFlush(road);
+
+            RaceType trail = new RaceType();
+            trail.setName("Trail trčanje");
+            raceTypeRepository.saveAndFlush(trail);
+
+            RaceType triathlon = new RaceType();
+            triathlon.setName("Trijatlon");
+            raceTypeRepository.saveAndFlush(triathlon);
+
+            RaceType swim = new RaceType();
+            swim.setName("Plivanje");
+            raceTypeRepository.saveAndFlush(swim);
+
+            RaceType bike = new RaceType();
+            bike.setName("Biciklizam");
+            raceTypeRepository.saveAndFlush(bike);
+        }
+    }
+
+    private void seedDistances() {
+        if (raceDistanceRepository.findAll().size() == 0) {
+            logger.info("Seeding distances");
+            RaceType road = raceTypeRepository.findByNameIgnoreCase("Drumsko trčanje");
+            RaceType trail = raceTypeRepository.findByNameIgnoreCase("Trail trčanje");
+            RaceType triathlon = raceTypeRepository.findByNameIgnoreCase("Trijatlon");
+            RaceType swim = raceTypeRepository.findByNameIgnoreCase("Plivanje");
+            RaceType bike = raceTypeRepository.findByNameIgnoreCase("Biciklizam");
+
+            // Road
+            RaceDistance road5 = new RaceDistance();
+            road5.setDistance("5km");
+            road5.setRaceType(road);
+            raceDistanceRepository.saveAndFlush(road5);
+
+            RaceDistance road7 = new RaceDistance();
+            road7.setDistance("7km");
+            road7.setRaceType(road);
+            raceDistanceRepository.saveAndFlush(road7);
+
+            RaceDistance road10 = new RaceDistance();
+            road10.setDistance("10km");
+            road10.setRaceType(road);
+            raceDistanceRepository.saveAndFlush(road10);
+
+            RaceDistance hm = new RaceDistance();
+            hm.setDistance("Polumaraton");
+            hm.setRaceType(road);
+            raceDistanceRepository.saveAndFlush(hm);
+
+            RaceDistance m = new RaceDistance();
+            m.setDistance("Maraton");
+            m.setRaceType(road);
+            raceDistanceRepository.saveAndFlush(m);
+
+            // Trail
+            RaceDistance tc = new RaceDistance();
+            tc.setDistance("Custom");
+            tc.setRaceType(trail);
+            raceDistanceRepository.saveAndFlush(tc);
+
+            // Triathlon
+            RaceDistance sprint = new RaceDistance();
+            sprint.setDistance("Sprint trijatlon");
+            sprint.setRaceType(triathlon);
+            raceDistanceRepository.saveAndFlush(sprint);
+
+            RaceDistance ot = new RaceDistance();
+            ot.setDistance("Olimpijski trijatlon");
+            ot.setRaceType(triathlon);
+            raceDistanceRepository.saveAndFlush(ot);
+
+            RaceDistance half = new RaceDistance();
+            half.setDistance("Poludistanca");
+            half.setRaceType(triathlon);
+            raceDistanceRepository.saveAndFlush(half);
+
+            RaceDistance full = new RaceDistance();
+            full.setDistance("Puna distanca");
+            full.setRaceType(triathlon);
+            raceDistanceRepository.saveAndFlush(full);
+
+            // Bike
+            RaceDistance bc = new RaceDistance();
+            bc.setDistance("Custom");
+            bc.setRaceType(bike);
+            raceDistanceRepository.saveAndFlush(bc);
+
+            // Swim
+            RaceDistance swim1 = new RaceDistance();
+            swim1.setDistance("1km");
+            swim1.setRaceType(swim);
+            raceDistanceRepository.saveAndFlush(swim1);
+
+            RaceDistance swim3 = new RaceDistance();
+            swim3.setDistance("3km");
+            swim3.setRaceType(swim);
+            raceDistanceRepository.saveAndFlush(swim3);
+
+            RaceDistance swim5 = new RaceDistance();
+            swim5.setDistance("5km");
+            swim5.setRaceType(swim);
+            raceDistanceRepository.saveAndFlush(swim5);
         }
     }
 }

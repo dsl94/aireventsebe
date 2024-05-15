@@ -85,7 +85,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .antMatchers("/account").authenticated()
 
                 //allow anonymous auth requests
-                .antMatchers("/api/flight/**").permitAll()
+                .antMatchers("/api/race-type/**").permitAll()
                 .antMatchers("/api/strava/**").permitAll()
                 .antMatchers("/api/auth/**").permitAll()
                 .antMatchers("/api/password/**").permitAll()
