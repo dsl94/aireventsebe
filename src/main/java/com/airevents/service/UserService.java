@@ -163,7 +163,6 @@ public class UserService {
         user.setShirtSize(request.getShirtSize());
         user.setPhone(request.getPhone());
         user.setInfo(request.getInfo());
-        user.setEmail(request.getEmail());
         if (request.getMedicalUntil() != null) {
             user.setMembershipUntil(LocalDate.parse(request.getMembershipUntil(), REQUEST_DATE_FORMAT).atStartOfDay());
         }
