@@ -27,6 +27,9 @@ public class UserMapper {
         if (request.getMembershipUntil() != null) {
             user.setMembershipUntil(LocalDate.parse(request.getMembershipUntil(), REQUEST_DATE_FORMAT).atStartOfDay());
         }
+        if (request.getMedicalUntil() != null) {
+            user.setMedicalUntil(LocalDate.parse(request.getMedicalUntil(), REQUEST_DATE_FORMAT).atStartOfDay());
+        }
         return user;
     }
 
@@ -44,6 +47,7 @@ public class UserMapper {
                 entity.getCreateDateTime().format(DATE_TIME_FORMATTER),
                 entity.getUpdateDateTime().format(DATE_TIME_FORMATTER),
                 entity.getMembershipUntil() == null ? null : entity.getMembershipUntil().format(DATE_FORMATTER),
+                entity.getMedicalUntil() == null ? null : entity.getMedicalUntil().format(DATE_FORMATTER),
                 entity.getFirstLoginDate() == null ? null : entity.getFirstLoginDate().format(DATE_TIME_FORMATTER),
                 entity.getLastLoginDate() == null ? null : entity.getLastLoginDate().format(DATE_TIME_FORMATTER),
                 entity.getStravaId() != null && entity.getUsername().contains("_") && !entity.getUsername().equals(entity.getEmail())

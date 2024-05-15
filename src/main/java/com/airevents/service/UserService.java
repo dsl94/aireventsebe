@@ -164,7 +164,13 @@ public class UserService {
         user.setPhone(request.getPhone());
         user.setInfo(request.getInfo());
         user.setEmail(request.getEmail());
-        user.setMembershipUntil(LocalDate.parse(request.getMembershipUntil(), REQUEST_DATE_FORMAT).atStartOfDay());
+        if (request.getMedicalUntil() != null) {
+            user.setMembershipUntil(LocalDate.parse(request.getMembershipUntil(), REQUEST_DATE_FORMAT).atStartOfDay());
+        }
+
+        if (request.getMedicalUntil() != null) {
+            user.setMedicalUntil(LocalDate.parse(request.getMedicalUntil(), REQUEST_DATE_FORMAT).atStartOfDay());
+        }
 
         return UserMapper.entityToResponse(userRepository.save(user));
     }

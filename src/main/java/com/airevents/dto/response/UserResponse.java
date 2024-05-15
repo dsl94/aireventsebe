@@ -22,6 +22,7 @@ public class UserResponse {
     private String createdDate;
     private String updateDate;
     private String membershipUntil;
+    private String medicalUntil;
     private String firstLoginDate;
     private String lastLoginDate;
     private boolean stravaLogin;

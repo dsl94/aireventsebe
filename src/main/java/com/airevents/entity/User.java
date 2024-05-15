@@ -42,6 +42,8 @@ public class User implements Serializable {
 
     @Column(name = "membership_until")
     private LocalDateTime membershipUntil;
+    @Column(name = "medical_until")
+    private LocalDateTime medicalUntil;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_role",

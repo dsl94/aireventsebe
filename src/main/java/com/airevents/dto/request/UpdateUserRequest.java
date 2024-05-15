@@ -14,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 public class UpdateUserRequest implements Validate {
     private String fullName;
     private String membershipUntil;
+    private String medicalUntil;
     private String stravaId;
     private String email;
     private String shirtSize;

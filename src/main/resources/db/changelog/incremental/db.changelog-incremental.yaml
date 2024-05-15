@@ -9,3 +9,5 @@ databaseChangeLog:
       file: db/changelog/incremental/challenges/challenges.sql
   - include:
       file: db/changelog/incremental/month/month.sql
+  - include:
+      file: db/changelog/incremental/medical/medical.sql

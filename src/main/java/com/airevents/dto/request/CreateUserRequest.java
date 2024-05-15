@@ -20,6 +20,7 @@ public class CreateUserRequest implements Validate {
     private String info;
     private String phone;
     private String membershipUntil;
+    private String medicalUntil;
 
     @Override
     public void validate() {
