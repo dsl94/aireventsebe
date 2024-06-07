@@ -232,7 +232,7 @@ public class ChallengeService {
         } finally {
             httpClient.close();
         }
-        if (token.isEmpty()) {
+        if (token == null || token.isEmpty()) {
             throw new RcnException(ErrorCode.NOT_FOUND,"Greska sa prijavom");
         }
 
