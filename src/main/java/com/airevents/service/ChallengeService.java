@@ -128,9 +128,13 @@ public class ChallengeService {
             for (UserChallenge uc : users) {
                 try {
                     CalculationResponse response = sync(uc.getUser(), challenge.getStartDate(), challenge.getEndDate());
-                    uc.setDistance(response.getTotalDistance());
-                    uc.setPerMonth(ow.writeValueAsString(response.getByMonth()));
-                    userChallengeRepository.saveAndFlush(uc);
+                    if (response == null) {
+                        System.out.println("Problem with sync for user: " + uc.getUser().getUsername());
+                    } else {
+                        uc.setDistance(response.getTotalDistance());
+                        uc.setPerMonth(ow.writeValueAsString(response.getByMonth()));
+                        userChallengeRepository.saveAndFlush(uc);
+                    }
                 } catch (IOException e) {
                     System.out.println(e);
                 }
@@ -143,6 +147,9 @@ public class ChallengeService {
     private CalculationResponse sync(User user, LocalDateTime startDate, LocalDateTime endDate) throws IOException {
         String activitiesUrl = "https://www.strava.com/api/v3/athlete/activities?before=" + endDate.atZone(ZoneId.systemDefault()).toEpochSecond() + "&after=" + startDate.atZone(ZoneId.systemDefault()).toEpochSecond() + "&per_page=200";
         String token = login(user.getStravaRefreshToken());
+        if (token == null) {
+            return null;
+        }
         CloseableHttpClient httpClient = HttpClients.createDefault();
         List<YearMonth> monthsBetween = getMonthsBetween(startDate, endDate);
         double distance = 0;
@@ -233,7 +240,7 @@ public class ChallengeService {
             httpClient.close();
         }
         if (token == null || token.isEmpty()) {
-            throw new RcnException(ErrorCode.NOT_FOUND,"Greska sa prijavom");
+            return null;
         }
 
         return token;
